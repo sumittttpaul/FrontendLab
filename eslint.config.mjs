@@ -5,7 +5,6 @@ import globals from "globals";
 // Plugins
 import tsEslint from "typescript-eslint";
 import pluginNode from "eslint-plugin-n";
-import turboPlugin from "eslint-plugin-turbo";
 import reactCompilerPlugin from "eslint-plugin-react-compiler";
 import prettierPlugin from "eslint-plugin-prettier";
 import eslintConfigPrettier from "eslint-config-prettier";
@@ -83,7 +82,6 @@ export default defineConfig([
     // Only define plugins NOT provided by Next.js presets
     plugins: {
       n: pluginNode,
-      turbo: turboPlugin,
       prettier: prettierPlugin,
       "react-compiler": reactCompilerPlugin,
     },
@@ -109,9 +107,6 @@ export default defineConfig([
       "@typescript-eslint/await-thenable": "error",
       "@typescript-eslint/no-misused-promises": "off",
       "@typescript-eslint/no-explicit-any": "off",
-
-      // Turbo
-      "turbo/no-undeclared-env-vars": "error",
 
       // Imports (plugin provided by Next.js, rules configured here)
       "import/no-extraneous-dependencies": [
