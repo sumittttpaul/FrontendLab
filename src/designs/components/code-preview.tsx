@@ -1,8 +1,8 @@
 import { Folder01Icon, ReactIcon, Cancel01Icon, Add01Icon, ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { CopyContent } from "@/designs/elements/shadcn/copy-content";
 import { ScrollArea } from "@/designs/elements/shadcn/scroll-area";
-import { HugeiconsIcon } from "@hugeicons/react";
 import { SyntaxHighlighter } from "./syntax-highlighter";
+import { HugeiconsIcon } from "@hugeicons/react";
 
 export function CodePreview({ children }: React.PropsWithChildren) {
   return (

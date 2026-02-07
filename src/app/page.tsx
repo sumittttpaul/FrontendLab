@@ -1,4 +1,5 @@
 import { CodePreview } from "@/designs/components/code-preview";
+import { VideoPlayer } from "@/designs/components/video-player";
 
 export default function Home() {
   return (
@@ -9,6 +10,8 @@ export default function Home() {
           <CodePreview>Code Preview</CodePreview>
         </div>
       </div>
+      <span className="select-none">Video player</span>
+      <VideoPlayer />
     </main>
   );
 }
