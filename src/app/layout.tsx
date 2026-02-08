@@ -11,7 +11,15 @@ const inter = Inter({ variable: "--inter-font", subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Frontend Lab • Best frontend engineering edge cases",
-  description: "Frontend Lab",
+  description:
+    "A repository of real-world frontend edge cases, systems engineering, and big-tech architectural patterns. Bridging the gap between feature implementation and scalable architecture.",
+  keywords: ["Frontend Engineering", "React 19", "Next.js 16", "System Design", "Performance Optimization", "Scalability", "Edge Cases"],
+  icons: {
+    icon: [
+      { media: "(prefers-color-scheme: light)", url: "/favicon-dark.svg" },
+      { media: "(prefers-color-scheme: dark)", url: "/favicon-light.svg" },
+    ],
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

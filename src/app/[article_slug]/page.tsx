@@ -20,7 +20,11 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props) {
   const { article_slug } = await params;
   const article = getArticle(article_slug);
-  return { title: article?.title + " • Frontend Lab" || "Page Not Found • Frontend Lab" };
+  if (!article) return { title: "Page Not Found • Frontend Lab", description: "The requested article could not be found." };
+  return {
+    title: article?.title + " • Frontend Lab" || "Page Not Found • Frontend Lab",
+    description: `Read "${article.title}" on Frontend Lab.`,
+  };
 }
 
 export default async function ArticlePage({ params }: Props) {
