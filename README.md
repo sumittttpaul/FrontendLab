@@ -1,36 +1,76 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🧪 Frontend Lab
 
-## Getting Started
+> A showcase of modern frontend engineering techniques, architectural patterns, and bleeding-edge React optimizations.
 
-First, run the development server:
+---
+
+## ⚡ Engineering Highlights: Why This Exists
+
+Most frontend tutorials cover the "happy path" — what happens when everything goes right. This repository exists to document the rest. My goal is to bridge the gap between feature implementation and **systems engineering**.
+
+The core of this project is a collection of architectural case studies presented in a **Problem/Solution** format:
+
+### 🧩 The Problem: Real-World Edge Cases
+
+Instead of generic "how to" guides, every article begins with a difficult constraint found in production environments. I tackle the specific, messy details that break applications at scale:
+
+* Race conditions in asynchronous UI state.
+* Hydration mismatches in complex server-rendered layouts.
+* Memory leaks in long-lived single-page sessions.
+* Browser-specific rendering quirks that standard libraries miss.
+
+### 🛠 The Solution: Big Tech Efficiency
+
+The answers provided don't just "fix" the bug — they engineer a solution. I apply the same rigorous standards used by top-tier tech companies, focusing on:
+
+* **O(1) State Access**: Optimizing data structures for instant UI feedback.
+* **Zero-Layout Shift**: Techniques to maintain visual stability during loading states.
+* **Bundle hygiene**: Ensuring solutions don't inflate the initial download size.
+
+### 🧠 The Goal
+
+This website serves as a living knowledge base for "unknown unknowns" — the engineering challenges you don't know you have until you hit 100k users.
+
+## 🛠 Tech Stack
+
+The platform itself is built to reflect these high standards, utilizing a modern, type-safe stack:
+
+* **Core**: [Next.js 16](https://nextjs.org/) (App Router), [TypeScript](https://www.typescriptlang.org/)
+* **Styling**: [Tailwind CSS 4](https://tailwindcss.com/)
+* **Architecture**: Server Components, Suspense Boundaries, and lazy-loaded Client Islands.
+* **Tooling**: Biome/ESLint for strict code quality enforcement.
+
+## 📂 Project Structure
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+src/
+├── app/             # App Router pages and layouts
+├── content/         # Static content (JSON based CMS)
+├── designs/         # Design System
+│   ├── components/  # Complex composed UI (VideoPlayer, etc.)
+│   ├── elements/    # Atomic UI elements (Typography, Buttons)
+│   └── styles/      # Global CSS and Tailwind directives
+└── libs/            # Shared utilities (Slugify, Error handling)
+
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🔍 Code Quality Standards
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+This project enforces strict code quality through automated tooling:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+* **Linting**: `npm run lint` (Zero-warning policy enforced)
+* **Type Checking**: `npm run check-types`
+* **Formatting**: `npm run format`
 
-## Learn More
+## 👨‍💻 Author
 
-To learn more about Next.js, take a look at the following resources:
+**Sumit Paul**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Website: [sumitttpaul.vercel.app](https://sumitttpaul.vercel.app/)
+- LinkedIn: [@sumitttpaul](https://www.linkedin.com/in/sumitttpaul/)
+- GitHub: [@sumittttpaul](https://github.com/sumittttpaul)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+<div align="center">
+  <p>Made with ❤️ by <a href="https://sumitttpaul.vercel.app/">Sumit Paul</a></p>
+  <p>⭐ Star this repo if you find it helpful!</p>
+</div>
