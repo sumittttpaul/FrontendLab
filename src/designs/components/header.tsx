@@ -15,14 +15,14 @@ export function Header() {
   return (
     <header className="bg-background/95 supports-backdrop-filter:bg-background/80 sticky top-0 z-50 flex w-full flex-col backdrop-blur-3xl">
       <div className="mx-auto flex h-14 w-full max-w-375 items-center justify-between gap-4 px-4">
-        <h1 className="text-xl font-bold select-none">Frontend Lab</h1>
+        <Image src="./logo.svg" height={60} width={160} className="max-sm:h-10 max-sm:w-35 dark:invert" alt="" />
         <div className="flex items-center gap-x-2">
           <Link
             href="https://github.com/sumittttpaul/FrontendLab"
-            className="hover:bg-input flex gap-x-2.5 rounded-full border border-black/15 p-1 text-sm/7 transition-all duration-100 ease-in hover:border-transparent active:scale-90 sm:pr-2.5 dark:border-white/15"
+            className="hover:bg-input flex gap-x-2.5 rounded-full border border-black/15 p-1 text-sm/7 transition-all duration-100 ease-in hover:border-transparent active:scale-90 sm:pr-3 sm:pl-1.5 dark:border-white/15"
           >
             <Image src="./github.svg" className="dark:invert" height={25} width={25} alt="" />
-            <span className="max-sm:hidden">GitHub</span>
+            <span className="select-none max-sm:hidden">GitHub</span>
           </Link>
           <ThemeSwitch />
         </div>
