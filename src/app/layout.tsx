@@ -1,5 +1,6 @@
 import { ThemeSwitchProvider } from "@/libs/next-theme";
 import { Header } from "@/designs/components/header";
+import { Footer } from "@/designs/components/footer";
 import { MotionLazy } from "@/libs/motion-lazy";
 import { Inter } from "next/font/google";
 import type { Metadata } from "next";
@@ -21,6 +22,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <MotionLazy>
             <Header />
             {children}
+            <Footer />
           </MotionLazy>
         </ThemeSwitchProvider>
       </body>

@@ -14,7 +14,7 @@ export function ThemeSwitch() {
   return (
     <div className="flex items-center">
       <SwitchWrapper permanent={true}>
-        <Switch size="lg" checked={resolvedTheme === "dark"} onCheckedChange={handleToggle} />
+        <Switch size="xl" checked={resolvedTheme === "dark"} onCheckedChange={handleToggle} />
         <SwitchIndicator state="on">
           <HugeiconsIcon icon={Sun01Icon} className={cn(resolvedTheme === "dark" ? "text-white/75" : "text-muted-foreground", "size-4")} />
         </SwitchIndicator>
