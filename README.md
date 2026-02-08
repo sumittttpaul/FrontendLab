@@ -1,6 +1,6 @@
 # 🧪 Frontend Lab
 
-> A showcase of modern frontend engineering techniques, architectural patterns, and bleeding-edge React optimizations.
+> A showcase of modern frontend engineering techniques, architectural patterns, and bleeding-edge optimizations.
 
 ---
 
