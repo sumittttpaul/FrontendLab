@@ -5,7 +5,6 @@ import { Inter } from "next/font/google";
 import type { Metadata } from "next";
 
 import "@/designs/styles/globals.css";
-import { ScrollArea } from "@/designs/elements/shadcn/scroll-area";
 
 const inter = Inter({ variable: "--inter-font", subsets: ["latin"] });
 
@@ -17,13 +16,11 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} relative h-dvh w-full overflow-hidden antialiased`}>
+      <body className={`${inter.variable} relative size-full overflow-x-hidden antialiased`}>
         <ThemeSwitchProvider>
           <MotionLazy>
-            <ScrollArea className="relative h-dvh w-full overflow-x-hidden">
-              <Header />
-              {children}
-            </ScrollArea>
+            <Header />
+            {children}
           </MotionLazy>
         </ThemeSwitchProvider>
       </body>

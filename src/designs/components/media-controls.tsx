@@ -37,7 +37,7 @@ export function MediaControls({ src, poster }: { src: string; poster?: string })
     >
       <video slot="media" src={src} poster={poster} crossOrigin="anonymous" preload="metadata" className="size-full object-cover" />
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-        <div className="big-play-button transform transition-transform hover:scale-110">
+        <div className="pointer-events-auto transform transition-transform hover:scale-110">
           <MediaPlayButton noTooltip className="flex size-[clamp(4rem,8vw,6rem)] items-center justify-center rounded-full bg-black/50">
             <HugeiconsIcon slot="play" icon={PlayIcon} strokeWidth={0} className="size-1/2 fill-white text-white" />
             <HugeiconsIcon slot="pause" icon={PauseIcon} strokeWidth={0} className="size-1/2 fill-white text-white" />

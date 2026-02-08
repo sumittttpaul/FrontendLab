@@ -10,9 +10,9 @@ export function SyntaxHighlighter({ code }: { code: string }) {
   return (
     <PrismLight
       showLineNumbers
+      style={tomorrow}
       language="typescript"
       lineNumberStyle={{ color: "gray", paddingRight: 20 }}
-      style={tomorrow}
       customStyle={{ backgroundColor: "transparent", padding: 0, margin: 0 }}
     >
       {code}
