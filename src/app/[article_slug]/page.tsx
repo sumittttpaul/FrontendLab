@@ -45,7 +45,6 @@ export async function generateMetadata({ params }: Props) {
       siteName: "Frontend Lab",
       authors: ["Frontend Lab"],
       publishedTime: article.publishedAt,
-      modifiedTime: article.publishedAt,
       title,
       description,
       images: thumbnail ? [{ width: 1200, height: 630, alt: title, url: thumbnail }] : [],
@@ -57,6 +56,7 @@ export async function generateMetadata({ params }: Props) {
       images: thumbnail ? [thumbnail] : [],
     },
     other: {
+      "article:published_date": article.publishedAt,
       "twitter:label1": "Reading time",
       "twitter:data1": article.readTime || "5 min read",
     },
