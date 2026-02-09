@@ -16,6 +16,19 @@
         "value": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod."
       },
       {
+        "type": "description",
+        "value": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod."
+      },
+      {
+        "type": "point",
+        "value": [
+          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.",
+          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.",
+          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.",
+          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod."
+        ]
+      },
+      {
         "type": "code",
         "value": "componentDidMount() {\n  setTimeout(() => {\n    this.setState({\n      component: null,\n    });\n  }, this.props.time || this.props.seconds * 1000);\n}",
         "path": "src/app/page.tsx"

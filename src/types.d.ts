@@ -15,8 +15,8 @@ declare global {
     sourceLink: string;
     keywords: string[];
     content: {
-      type: "heading" | "description" | "code" | "video" | "separator" | "spacing";
-      value: string;
+      type: "heading" | "description" | "code" | "video" | "separator" | "spacing" | "point";
+      value: string | string[];
       path?: string;
       thumbnail?: string;
     }[];

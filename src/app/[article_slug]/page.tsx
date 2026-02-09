@@ -10,6 +10,7 @@ import { getArticle, getAllSlugs } from "@/libs/article";
 import { Info } from "@/designs/elements/articles/info";
 import { Page } from "@/designs/elements/articles/page";
 import { notFound } from "next/navigation";
+import { Point, PointContainer } from "@/designs/elements/articles/point";
 
 type Props = { params: Promise<{ article_slug: string }> };
 
@@ -45,14 +46,22 @@ export default async function ArticlePage({ params }: Props) {
             return <Description key={index}>{content.value}</Description>;
           case "code":
             if (!content.path) return null;
-            return <CodePreview key={index} path={content.path} code={content.value} />;
+            return <CodePreview key={index} path={content.path} code={content.value as string} />;
           case "video":
             if (!content.thumbnail) return null;
-            return <VideoPlayer key={index} src={content.value} thumbnail={content.thumbnail} />;
+            return <VideoPlayer key={index} src={content.value as string} thumbnail={content.thumbnail} />;
           case "separator":
             return <Separator key={index} />;
           case "spacing":
             return <Spacing key={index} />;
+          case "point":
+            return (
+              <PointContainer key={index}>
+                {(content.value as string[]).map((point, index) => (
+                  <Point key={index}>{point}</Point>
+                ))}
+              </PointContainer>
+            );
           default:
             return null;
         }
