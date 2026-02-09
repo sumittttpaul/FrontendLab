@@ -56,7 +56,7 @@ export async function generateMetadata({ params }: Props) {
       images: thumbnail ? [thumbnail] : [],
     },
     other: {
-      "article:published_date": article.publishedAt,
+      "article:published_time": article.publishedAt,
       "twitter:label1": "Reading time",
       "twitter:data1": article.readTime || "5 min read",
     },
