@@ -3,9 +3,9 @@
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useState } from "react";
 import {
+  MediaTimeRange,
   MediaController,
   MediaControlBar,
-  MediaTimeRange,
   MediaPlayButton,
   MediaMuteButton,
   MediaVolumeRange,
@@ -33,11 +33,11 @@ export function MediaControls({ src, poster }: { src: string; poster?: string })
     <MediaController
       onPlay={() => setHasPlayed(true)}
       onPlayCapture={() => setHasPlayed(true)}
-      className="block aspect-video size-full [--media-control-background:transparent] [--media-control-hover-background:transparent] [--media-icon-color:white] [--media-preview-time-background:black/60] [--media-preview-time-border-radius:4px] [--media-preview-time-margin-bottom:5px] [--media-preview-time-padding:4px_8px] [--media-preview-time-text-shadow:none] [--media-range-bar-border-radius:999px] [--media-range-bar-color:white] [--media-range-thumb-background:white] [--media-range-thumb-border-radius:999px] [--media-range-thumb-height:0.5rem] [--media-range-thumb-width:0.5rem] [--media-range-track-border-radius:999px] [--media-range-track-color:white/30] [--media-range-track-height:0.5rem]"
+      className="block aspect-video size-full [--media-control-background:transparent] [--media-control-hover-background:transparent] [--media-icon-color:white] [--media-preview-time-background:black/60] [--media-preview-time-border-radius:4px] [--media-preview-time-margin-bottom:5px] [--media-preview-time-padding:4px_8px] [--media-preview-time-text-shadow:none] [--media-range-bar-color:white] [--media-range-thumb-background:white] [--media-range-thumb-height:0rem] [--media-range-thumb-width:0rem] [--media-range-track-color:white/30] [--media-range-track-height:0.5rem]"
     >
       <video slot="media" src={src} poster={poster} crossOrigin="anonymous" preload="metadata" className="size-full object-cover" />
-      <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-        <div className="pointer-events-auto transform transition-transform hover:scale-110">
+      <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
+        <div onClick={(e) => e.stopPropagation()} className="pointer-events-auto transform transition-transform hover:scale-110">
           <MediaPlayButton noTooltip className="flex size-[clamp(4rem,8vw,6rem)] items-center justify-center rounded-full bg-black/50">
             <HugeiconsIcon slot="play" icon={PlayIcon} strokeWidth={0} className="size-1/2 fill-white text-white" />
             <HugeiconsIcon slot="pause" icon={PauseIcon} strokeWidth={0} className="size-1/2 fill-white text-white" />

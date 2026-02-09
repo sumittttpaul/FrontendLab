@@ -193,6 +193,12 @@
   background: none;
 }
 
+media-time-range::part(track),
+media-time-range::part(buffered),
+media-time-range::part(progress) {
+  border-radius: 999px;
+}
+
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
   -ms-overflow-style: none;

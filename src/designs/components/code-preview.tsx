@@ -1,7 +1,7 @@
 import { Folder01Icon, ReactIcon, Cancel01Icon, Add01Icon, ArrowRight01Icon } from "@hugeicons/core-free-icons";
+import { SyntaxHighlighter } from "@/designs/components/syntax-highlighter";
 import { CopyContent } from "@/designs/elements/shadcn/copy-content";
 import { ScrollArea } from "@/designs/elements/shadcn/scroll-area";
-import { SyntaxHighlighter } from "./syntax-highlighter";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Fragment } from "react";
 
