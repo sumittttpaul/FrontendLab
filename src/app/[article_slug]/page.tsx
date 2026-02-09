@@ -1,3 +1,4 @@
+import { Point, PointContainer } from "@/designs/elements/articles/point";
 import { Description } from "@/designs/elements/articles/description";
 import { Separator } from "@/designs/elements/articles/separator";
 import { CodePreview } from "@/designs/components/code-preview";
@@ -10,7 +11,6 @@ import { getArticle, getAllSlugs } from "@/libs/article";
 import { Info } from "@/designs/elements/articles/info";
 import { Page } from "@/designs/elements/articles/page";
 import { notFound } from "next/navigation";
-import { Point, PointContainer } from "@/designs/elements/articles/point";
 
 type Props = { params: Promise<{ article_slug: string }> };
 
@@ -21,10 +21,45 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props) {
   const { article_slug } = await params;
   const article = getArticle(article_slug);
-  if (!article) return { title: "Page Not Found • Frontend Lab", description: "The requested article could not be found." };
+
+  if (!article)
+    return {
+      title: "Page Not Found • Frontend Lab",
+      description: "The requested article could not be found.",
+      robots: { index: false, follow: true },
+    };
+
+  const title = `${article.title} • Frontend Lab`;
+  const description = article.content.find((content) => content.type === "description")?.value ?? "Read this article on Frontend Lab.";
+  const thumbnail = article.content.find((content) => content.type === "video")?.thumbnail;
+  const keywords = article.keywords ?? [];
+
   return {
-    title: article?.title + " • Frontend Lab" || "Page Not Found • Frontend Lab",
-    description: `Read "${article.title}" on Frontend Lab.`,
+    title,
+    description,
+    keywords,
+    authors: [{ name: "Frontend Lab" }],
+    openGraph: {
+      type: "article",
+      locale: "en_US",
+      siteName: "Frontend Lab",
+      authors: ["Frontend Lab"],
+      publishedTime: article.publishedAt,
+      modifiedTime: article.publishedAt,
+      title,
+      description,
+      images: thumbnail ? [{ width: 1200, height: 630, alt: title, url: thumbnail }] : [],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: thumbnail ? [thumbnail] : [],
+    },
+    other: {
+      "twitter:label1": "Reading time",
+      "twitter:data1": article.readTime || "5 min read",
+    },
   };
 }
 

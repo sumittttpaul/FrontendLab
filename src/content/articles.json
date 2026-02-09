@@ -1,11 +1,11 @@
 [
   {
     "id": "1",
-    "title": "How to build agents with filesystems and bash",
-    "publishedAt": "Jan 9, 2026",
+    "title": "Async race condition in search results",
+    "publishedAt": "Feb 10, 2026",
     "readTime": "2 min",
-    "sourceLink": "how-to-build-agents-with-filesystems-and-bash",
-    "keywords": ["Keyword", "adad", "asdasd", "asdsda"],
+    "sourceLink": "https://github.com/frontendlab/frontendlab/blob/main/src/app/search/page.tsx",
+    "keywords": ["async race condition", "react state", "frontend edge case", "ui correctness", "search"],
     "content": [
       {
         "type": "heading",
@@ -13,29 +13,29 @@
       },
       {
         "type": "description",
-        "value": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod."
+        "value": "Under rapid input changes and slow network conditions, multiple search requests can remain in flight at the same time. When responses resolve out of order, older results may overwrite newer state, causing the UI to display incorrect data."
       },
       {
         "type": "description",
-        "value": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod."
+        "value": "The implementation assumes that the most recent request will resolve last. This assumption breaks under real-world network latency and asynchronous execution."
       },
       {
         "type": "point",
         "value": [
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.",
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.",
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.",
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod."
+          "Multiple async requests in flight simultaneously",
+          "Variable or throttled network latency",
+          "Rapid user input before previous requests resolve",
+          "State updates tied directly to promise resolution"
         ]
       },
       {
         "type": "code",
-        "value": "componentDidMount() {\n  setTimeout(() => {\n    this.setState({\n      component: null,\n    });\n  }, this.props.time || this.props.seconds * 1000);\n}",
-        "path": "src/app/page.tsx"
+        "value": "useEffect(() => {\n  fetchResults(query).then((results) => {\n    setResults(results)\n  })\n}, [query])",
+        "path": "src/app/search/page.tsx"
       },
       {
         "type": "description",
-        "value": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod."
+        "value": "This implementation works in happy paths but does not guard against out-of-order async resolution. Any response that resolves later is allowed to update state, regardless of when it was initiated."
       },
       {
         "type": "video",
@@ -52,16 +52,16 @@
       },
       {
         "type": "description",
-        "value": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod."
+        "value": "Each request is assigned an identity, and state updates are only allowed from the most recent request. Responses that resolve out of order are ignored instead of committing stale data."
       },
       {
         "type": "code",
-        "value": "componentDidMount() {\n  setTimeout(() => {\n    this.setState({\n      component: null,\n    });\n  }, this.props.time || this.props.seconds * 1000);\n}",
-        "path": "src/app/page.tsx"
+        "value": "const requestIdRef = useRef(0)\n\nuseEffect(() => {\n  const requestId = ++requestIdRef.current\n\n  fetchResults(query).then((results) => {\n    if (requestId === requestIdRef.current) {\n      setResults(results)\n    }\n  })\n}, [query])",
+        "path": "src/app/search/page.tsx"
       },
       {
         "type": "description",
-        "value": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod."
+        "value": "By guarding state updates with request identity, the UI becomes resilient to async timing differences and network variability."
       },
       {
         "type": "video",
@@ -74,7 +74,7 @@
       },
       {
         "type": "description",
-        "value": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod."
+        "value": "This issue is not specific to search, debouncing, or React. It occurs whenever UI state is updated directly from asynchronous work without guarding against out-of-order resolution. Treating async responses as untrusted by default and committing state only when intent is still valid prevents an entire class of UI correctness bugs."
       }
     ]
   }
