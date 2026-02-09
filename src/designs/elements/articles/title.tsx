@@ -21,7 +21,7 @@ export function Title({ children }: React.PropsWithChildren) {
         />
         LinkedIn
       </Link>
-      <h1 className="max-w-md text-center text-[1.4rem] leading-8 font-bold max-[56rem]:px-4 sm:text-3xl sm:leading-10 [@media(width_>=_56rem)]:max-w-full [@media(width_>=_56rem)]:text-[3.1rem] [@media(width_>=_56rem)]:leading-14">
+      <h1 className="max-w-xs text-center text-[1.4rem] leading-8 font-bold max-[56rem]:px-4 sm:max-w-md sm:text-3xl sm:leading-10 [@media(width_>=_56rem)]:max-w-full [@media(width_>=_56rem)]:text-[3.1rem] [@media(width_>=_56rem)]:leading-14">
         {children}
       </h1>
       <div className="flex items-center gap-2.5 max-[20rem]:flex-col max-[20rem]:gap-1 md:gap-3">

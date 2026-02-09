@@ -4,9 +4,9 @@ export function PointContainer({ children }: { children: React.ReactNode }) {
 
 export function Point({ children }: { children: React.ReactNode }) {
   return (
-    <li className="text-justify text-sm text-pretty md:text-base">
-      <span className="text-muted-foreground/60 mr-3.5 truncate md:mr-5">●</span>
-      {children}
+    <li className="flex gap-3.5 text-sm md:gap-5 md:text-base">
+      <span className="text-muted-foreground/60 truncate">●</span>
+      <span>{children}</span>
     </li>
   );
 }

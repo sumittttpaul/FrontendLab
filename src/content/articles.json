@@ -22,10 +22,10 @@
       {
         "type": "point",
         "value": [
-          "Multiple async requests in flight simultaneously",
-          "Variable or throttled network latency",
-          "Rapid user input before previous requests resolve",
-          "State updates tied directly to promise resolution"
+          "Multiple async requests in flight simultaneously.",
+          "Variable or throttled network latency.",
+          "Rapid user input before previous requests resolve.",
+          "State updates tied directly to promise resolution."
         ]
       },
       {
