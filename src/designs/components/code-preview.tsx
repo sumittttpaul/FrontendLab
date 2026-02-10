@@ -44,7 +44,7 @@ export function CodePreview({ children, code, path }: React.PropsWithChildren<{ 
                 </div>
               </ScrollArea>
               <ScrollArea orientation="horizontal" className="relative w-full">
-                <div className="flex w-auto items-center gap-2 border-y border-y-[color-mix(in_oklab,var(--color-white)_10%,transparent)]/75 px-2 py-2.5 text-xs font-medium text-[oklch(0.708_0_0)] select-none max-sm:gap-1.5 max-sm:px-1.5">
+                <div className="flex w-auto truncate items-center gap-2 border-y border-y-[color-mix(in_oklab,var(--color-white)_10%,transparent)]/75 px-2 py-2.5 text-xs font-medium text-[oklch(0.708_0_0)] select-none max-sm:gap-1.5 max-sm:px-1.5">
                   {directories.map((directory, index) => (
                     <Fragment key={index}>
                       <HugeiconsIcon icon={Folder01Icon} size={14} strokeWidth={2} className="min-w-3.5" />
