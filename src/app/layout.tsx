@@ -25,7 +25,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} relative size-full overflow-x-hidden antialiased`}>
+      <body className={`${inter.variable} relative grid size-full min-h-dvh grid-rows-[auto_1fr_auto] overflow-x-hidden antialiased`}>
         <ThemeSwitchProvider>
           <MotionLazy>
             <Header />

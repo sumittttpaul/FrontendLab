@@ -13,8 +13,8 @@ const DashedLine = ({ className = "" }: { className?: string }) => (
 
 export function Page({ children }: React.PropsWithChildren) {
   return (
-    <main className="mx-auto size-full max-w-300 p-8 max-[56rem]:p-4">
-      <div className="relative flex size-full flex-col items-center justify-center md:mt-15 [@media(max-width:56rem)]:mt-5">
+    <main className="mx-auto size-full max-w-300 p-8 max-[56rem]:p-4 max-[56rem]:pt-9 md:pt-23">
+      <div className="relative flex size-full flex-col items-center justify-center">
         <div className="pointer-events-none absolute inset-0 z-0">
           <div className="relative size-full border">
             <div className="grid size-full grid-cols-2 md:grid-cols-3">

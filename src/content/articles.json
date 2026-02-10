@@ -30,7 +30,7 @@
       },
       {
         "type": "code",
-        "value": "useEffect(() => {\n  fetchResults(query).then((results) => {\n    setResults(results)\n  })\n}, [query])",
+        "value": "useEffect(() => {\n  if (!query.trim()) return;\n\n  void (async () => {\n    try {\n      const data = await fetchResults(query);\n      console.log(\"commit results for:\", query);\n      setResults(data);\n    } catch (error) {\n      console.error(\"search request failed\", error);\n    }\n  })();\n}, [query]);",
         "path": "src/app/search/page.tsx"
       },
       {
@@ -56,7 +56,7 @@
       },
       {
         "type": "code",
-        "value": "const requestIdRef = useRef(0)\n\nuseEffect(() => {\n  const requestId = ++requestIdRef.current\n\n  fetchResults(query).then((results) => {\n    if (requestId === requestIdRef.current) {\n      setResults(results)\n    }\n  })\n}, [query])",
+        "value": "const requestIdRef = useRef(0);\n\nuseEffect(() => {\n  if (!query.trim()) {\n    requestIdRef.current = 0;\n    return;\n  }\n\n  const requestId = ++requestIdRef.current;\n\n  void (async () => {\n    try {\n      const data = await fetchResults(query);\n      if (requestId === requestIdRef.current) {\n        console.log(\"commit results for:\", query);\n        setResults(data);\n      } else {\n        console.log(\"ignored stale response for:\", query);\n      }\n    } catch (error) {\n      console.error(\"search request failed\", error);\n    }\n  })();\n}, [query]);",
         "path": "src/app/search/page.tsx"
       },
       {
