@@ -72,7 +72,7 @@ export default async function ArticlePage({ params }: Props) {
   return (
     <Page>
       <Title>{article.title}</Title>
-      <Info PublishedAt={article.publishedAt} ReadTime={article.readTime} SourceLink={article.slug} />
+      <Info PublishedAt={article.publishedAt} ReadTime={article.readTime} SourceLink={article.sourceLink} />
       {article.content.map((content, index) => {
         switch (content.type) {
           case "heading":

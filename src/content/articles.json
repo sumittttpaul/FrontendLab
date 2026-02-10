@@ -78,5 +78,80 @@
         "value": "This issue is not specific to search, debouncing, or React. It occurs whenever UI state is updated directly from asynchronous work without guarding against out-of-order resolution. Treating async responses as untrusted by default and committing state only when intent is still valid prevents an entire class of UI correctness bugs."
       }
     ]
+  },
+  {
+    "id": "2",
+    "title": "State update after unmount during navigation",
+    "publishedAt": "Feb 10, 2026",
+    "readTime": "2 min",
+    "banner": "https://res.cloudinary.com/frontendddlab/image/upload/v1770735145/banner_h5rvad.png",
+    "sourceLink": "https://github.com/sumittttpaul/FrontendLab/blob/master/src/app/practice/state-update-after-unmount-during-navigation/page.tsx",
+    "keywords": ["react unmount bug", "state update after unmount", "frontend lifecycle", "async ui failure", "navigation teardown"],
+    "content": [
+      {
+        "type": "heading",
+        "value": "Problem"
+      },
+      {
+        "type": "description",
+        "value": "When a component starts asynchronous work and the user navigates away before it resolves, the async callback may still attempt to update state. At that point, the component no longer exists in the UI tree."
+      },
+      {
+        "type": "description",
+        "value": "This failure usually appears only under fast navigation or slow async resolution, making it easy to miss during development and code review."
+      },
+      {
+        "type": "point",
+        "value": [
+          "Async work initiated inside an effect.",
+          "User navigates away before async resolves.",
+          "Component unmounts while async is still running.",
+          "Async callback commits state after unmount."
+        ]
+      },
+      {
+        "type": "code",
+        "value": "useEffect(() => {\n  console.log(\"[BROKEN] Screen mounted → async work started\");\n\n  void (async () => {\n    await delay(800);\n    console.log(\"[BROKEN] Async finished → updating screen\");\n    setStatus(\"loaded\");\n  })();\n\n  return () => {\n    console.log(\"[BROKEN] Screen unmounted\");\n  };\n}, []);",
+        "path": "src/app/practice/state-update-after-unmount-during-navigation/page.tsx"
+      },
+      {
+        "type": "description",
+        "value": "The async task has no awareness of the component lifecycle. Once started, it continues executing even after the component has been removed from the UI."
+      },
+      {
+        "type": "spacing",
+        "value": ""
+      },
+      {
+        "type": "heading",
+        "value": "Solution"
+      },
+      {
+        "type": "description",
+        "value": "Each effect execution is assigned an ownership identity. Cleanup invalidates that ownership, and async work is only allowed to commit state if its ownership is still valid."
+      },
+      {
+        "type": "code",
+        "value": "const effectIdRef = useRef(0);\n\nuseEffect(() => {\n  const effectId = ++effectIdRef.current;\n  console.log(\"[FIXED] Screen mounted → ownership id:\", effectId);\n\n  void (async () => {\n    await delay(800);\n\n    if (effectId !== effectIdRef.current) {\n      console.log(\"[FIXED] Async finished → ownership no longer valid, update skipped:\", effectId);\n      return;\n    }\n\n    console.log(\"[FIXED] Async finished → ownership valid, screen updated:\", effectId);\n    setStatus(\"loaded\");\n  })();\n\n  return () => {\n    if (effectIdRef.current === effectId) {\n      effectIdRef.current = -1;\n    }\n    console.log(\"[FIXED] Screen unmounted → ownership invalidated:\", effectId);\n  };\n}, []);",
+        "path": "src/app/practice/state-update-after-unmount-during-navigation/page.tsx"
+      },
+      {
+        "type": "description",
+        "value": "Instead of relying on mount flags, the async work validates ownership before committing state. Cleanup explicitly invalidates intent, making teardown safe even under rapid navigation."
+      },
+      {
+        "type": "video",
+        "value": "https://res.cloudinary.com/frontendddlab/video/upload/v1770735137/broken_fixed_uaka7w.mp4",
+        "thumbnail": "https://res.cloudinary.com/frontendddlab/image/upload/v1770735144/thumbnail_vcaz4d.png"
+      },
+      {
+        "type": "separator",
+        "value": ""
+      },
+      {
+        "type": "description",
+        "value": "This issue is not about React warnings or effect cleanup syntax. It occurs whenever asynchronous work is allowed to outlive the UI intent that created it. Treating async callbacks as untrusted unless their ownership is still valid prevents state leaks, memory issues, and subtle UI corruption during navigation."
+      }
+    ]
   }
 ]
