@@ -4,7 +4,7 @@
     "title": "Async race condition in search results",
     "publishedAt": "Feb 10, 2026",
     "readTime": "2 min",
-    "sourceLink": "https://github.com/frontendlab/frontendlab/blob/main/src/app/search/page.tsx",
+    "sourceLink": "https://github.com/sumittttpaul/FrontendLab/blob/master/src/app/practice/async-race-condition-in-search-results/page.tsx",
     "keywords": ["async race condition", "react state", "frontend edge case", "ui correctness", "search"],
     "content": [
       {
@@ -31,7 +31,7 @@
       {
         "type": "code",
         "value": "useEffect(() => {\n  if (!query.trim()) return;\n\n  void (async () => {\n    try {\n      const data = await fetchResults(query);\n      console.log(\"commit results for:\", query);\n      setResults(data);\n    } catch (error) {\n      console.error(\"search request failed\", error);\n    }\n  })();\n}, [query]);",
-        "path": "src/app/search/page.tsx"
+        "path": "src/app/practice/async-race-condition-in-search-results/page.tsx"
       },
       {
         "type": "description",
@@ -39,8 +39,8 @@
       },
       {
         "type": "video",
-        "value": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-        "thumbnail": "https://cdn.shortpixel.ai/spai/q_lossy+w_728+to_webp+ret_img/thumbnailtest.com/wp-content/uploads/2024/04/Thumbnail-URL.jpg"
+        "value": "https://res.cloudinary.com/frontendddlab/video/upload/v1770708401/broken_gpijkg.mp4",
+        "thumbnail": "https://res.cloudinary.com/frontendddlab/image/upload/v1770709385/thumbnail_lhsulr.png"
       },
       {
         "type": "spacing",
@@ -57,7 +57,7 @@
       {
         "type": "code",
         "value": "const requestIdRef = useRef(0);\n\nuseEffect(() => {\n  if (!query.trim()) {\n    requestIdRef.current = 0;\n    return;\n  }\n\n  const requestId = ++requestIdRef.current;\n\n  void (async () => {\n    try {\n      const data = await fetchResults(query);\n      if (requestId === requestIdRef.current) {\n        console.log(\"commit results for:\", query);\n        setResults(data);\n      } else {\n        console.log(\"ignored stale response for:\", query);\n      }\n    } catch (error) {\n      console.error(\"search request failed\", error);\n    }\n  })();\n}, [query]);",
-        "path": "src/app/search/page.tsx"
+        "path": "src/app/practice/async-race-condition-in-search-results/page.tsx"
       },
       {
         "type": "description",
@@ -65,8 +65,8 @@
       },
       {
         "type": "video",
-        "value": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-        "thumbnail": "https://cdn.shortpixel.ai/spai/q_lossy+w_728+to_webp+ret_img/thumbnailtest.com/wp-content/uploads/2024/04/Thumbnail-URL.jpg"
+        "value": "https://res.cloudinary.com/frontendddlab/video/upload/v1770708403/fixed_smxrnq.mp4",
+        "thumbnail": "https://res.cloudinary.com/frontendddlab/image/upload/v1770709385/thumbnail_lhsulr.png"
       },
       {
         "type": "separator",
