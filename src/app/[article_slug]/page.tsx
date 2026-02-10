@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: Props) {
 
   const title = `${article.title} • Frontend Lab`;
   const description = article.content.find((content) => content.type === "description")?.value ?? "Read this article on Frontend Lab.";
-  const thumbnail = article.content.find((content) => content.type === "video")?.thumbnail;
+  const banner = article.banner;
   const keywords = article.keywords ?? [];
 
   return {
@@ -47,13 +47,13 @@ export async function generateMetadata({ params }: Props) {
       publishedTime: article.publishedAt,
       title,
       description,
-      images: thumbnail ? [{ width: 1200, height: 630, alt: title, url: thumbnail }] : [],
+      images: banner ? [{ width: 1200, height: 630, alt: title, url: banner }] : [],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: thumbnail ? [thumbnail] : [],
+      images: banner ? [banner] : [],
     },
     other: {
       "article:published_time": article.publishedAt,

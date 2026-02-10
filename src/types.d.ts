@@ -10,6 +10,7 @@ declare global {
     id: string;
     title: string;
     slug: string;
+    banner: string;
     publishedAt: string;
     readTime: string;
     sourceLink: string;
