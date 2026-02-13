@@ -153,5 +153,81 @@
         "value": "This issue is not about React warnings or effect cleanup syntax. It occurs whenever asynchronous work is allowed to outlive the UI intent that created it. Treating async callbacks as untrusted unless their ownership is still valid prevents state leaks, memory issues, and subtle UI corruption during navigation."
       }
     ]
+  },
+  {
+    "id": "3",
+    "title": "Stale closure in click outside listener",
+    "publishedAt": "Feb 13, 2026",
+    "readTime": "2 min",
+    "banner": "https://res.cloudinary.com/frontendddlab/image/upload/v1770993341/banner_v77iew.png",
+    "sourceLink": "https://github.com/sumittttpaul/FrontendLab/blob/master/src/app/practice/stale-closure-in-click-outside-listener/page.tsx",
+    "keywords": ["stale closure", "react event listener bug", "click outside issue", "frontend state safety", "ui correctness"],
+    "content": [
+      {
+        "type": "heading",
+        "value": "Problem"
+      },
+      {
+        "type": "description",
+        "value": "Event listeners defined inside effects capture state from the render during which they were created. If the listener is attached once and depends on state that later changes, it may continue operating on outdated values."
+      },
+      {
+        "type": "point",
+        "value": [
+          "Dropdown open state toggled by button.",
+          "Document click listener attached once on mount.",
+          "Listener captures initial 'open' value.",
+          "UI state and listener logic fall out of sync."
+        ]
+      },
+      {
+        "type": "code",
+        "value": "useEffect(() => {\n  function handleClick(event: MouseEvent) {\n    console.log(\"[BROKEN] listener sees open =\", open);\n\n    const target = event.target as Node;\n    const isOutside =\n      containerRef.current &&\n      !containerRef.current.contains(target);\n\n    if (open && isOutside) {\n      console.log(\"[BROKEN] closing dropdown\");\n      setOpen(false);\n    }\n  }\n\n  document.addEventListener(\"click\", handleClick);\n\n  return () => {\n    document.removeEventListener(\"click\", handleClick);\n  };\n}, []);",
+        "path": "src/app/practice/stale-closure-click-outside/page.tsx"
+      },
+      {
+        "type": "description",
+        "value": "Because the effect runs only once, the event listener permanently captures the initial value of 'open'. The dropdown state changes visually, but the listener continues evaluating stale state."
+      },
+      {
+        "type": "video",
+        "value": "https://res.cloudinary.com/frontendddlab/video/upload/v1770993344/broken_bxya01.mp4",
+        "thumbnail": "https://res.cloudinary.com/frontendddlab/image/upload/v1770993341/thumbnail_broken_j3guxg.png"
+      },
+      {
+        "type": "spacing",
+        "value": ""
+      },
+      {
+        "type": "heading",
+        "value": "Solution"
+      },
+      {
+        "type": "description",
+        "value": "Keep the event listener stable, but separate state freshness from subscription lifecycle. Store the latest state in a mutable ref and read from it inside the listener."
+      },
+      {
+        "type": "code",
+        "value": "const openRef = useRef(open);\nconst containerRef = useRef<HTMLDivElement | null>(null);\n\nuseEffect(() => {\n  openRef.current = open;\n}, [open]);\n\nuseEffect(() => {\n  function handleClick(event: MouseEvent) {\n    const target = event.target as Node;\n    const isOutside =\n      containerRef.current &&\n      !containerRef.current.contains(target);\n\n    console.log(\"[FIXED] click detected | openRef:\", openRef.current, \"| outside:\", isOutside);\n\n    if (openRef.current && isOutside) {\n      console.log(\"[FIXED] closing dropdown\");\n      setOpen(false);\n    }\n  }\n\n  document.addEventListener(\"click\", handleClick);\n\n  return () => {\n    document.removeEventListener(\"click\", handleClick);\n  };\n}, []);",
+        "path": "src/app/practice/stale-closure-click-outside/page.tsx"
+      },
+      {
+        "type": "description",
+        "value": "The listener remains attached only once, preventing unnecessary re-subscriptions. State freshness is handled independently through a ref, ensuring the dropdown logic always evaluates the latest value without closure drift."
+      },
+      {
+        "type": "video",
+        "value": "https://res.cloudinary.com/frontendddlab/video/upload/v1770993345/fixed_nk5soq.mp4",
+        "thumbnail": "https://res.cloudinary.com/frontendddlab/image/upload/v1770993341/thumbnail_fixed_lwmgpl.png"
+      },
+      {
+        "type": "separator",
+        "value": ""
+      },
+      {
+        "type": "description",
+        "value": "Closures capture values at creation time. When subscriptions remain stable but state changes over time, logic may silently operate on outdated data. Separating subscription stability from state freshness prevents subtle UI inconsistencies and aligns event handling with real user behavior."
+      }
+    ]
   }
 ]

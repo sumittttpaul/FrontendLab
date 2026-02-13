@@ -75,13 +75,14 @@ export default function Page() {
   return (
     <main className="mx-auto flex size-full max-w-200 flex-col items-center justify-center gap-6 p-8 max-[56rem]:p-4">
       <div className="flex items-center gap-4">
-        <span className="rounded-full border px-5 py-2 text-sm">Viewing: {show.toUpperCase()} example</span>
+        <span className="rounded-full border px-5 py-2 text-sm select-none">Viewing: {show.toUpperCase()} example</span>
       </div>
       {show === "broken" ? <BrokenExample /> : <FixedExample />}
       <p className="text-muted-foreground text-sm">Open console → mount page → immediately navigate away → observe logs.</p>
       <div className="flex items-center gap-4">
         <button
-          className="hover:bg-input rounded-full border px-5 py-2 text-sm hover:border-transparent"
+          type="button"
+          className="hover:bg-input rounded-full border px-5 py-2 text-sm select-none hover:border-transparent"
           onClick={() => setShow((v) => (v === "broken" ? "fixed" : "broken"))}
         >
           Switch
