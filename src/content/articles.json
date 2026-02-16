@@ -229,5 +229,71 @@
         "value": "Closures capture values at creation time. When subscriptions remain stable but state changes over time, logic may silently operate on outdated data. Separating subscription stability from state freshness prevents subtle UI inconsistencies and aligns event handling with real user behavior."
       }
     ]
+  },
+  {
+    "id": "4",
+    "title": "Double submit caused by UI state lag",
+    "publishedAt": "Feb 16, 2026",
+    "readTime": "2 min",
+    "banner": "https://res.cloudinary.com/frontendddlab/image/upload/v1771221159/banner_xg92mm.png",
+    "sourceLink": "https://github.com/sumittttpaul/FrontendLab/blob/master/src/app/practice/double-submit-caused-by-ui-state-lag/page.tsx",
+    "keywords": ["double submit bug", "frontend edge case", "react button disable race", "ui correctness", "state safety"],
+    "content": [
+      {
+        "type": "heading",
+        "value": "Problem"
+      },
+      {
+        "type": "description",
+        "value": "A submit button is disabled only after state updates to 'loading'. Under rapid user interaction, multiple clicks can occur before the UI visually reflects the disabled state."
+      },
+      {
+        "type": "point",
+        "value": [
+          "User clicks button rapidly.",
+          "State update is scheduled but not yet committed.",
+          "Multiple submit handlers execute.",
+          "Duplicate API calls are triggered."
+        ]
+      },
+      {
+        "type": "code",
+        "value": "const [loading, setLoading] = useState(false);\n\nfunction handleSubmit() {\n  if (loading) return;\n\n  console.log(\"[BROKEN] submit triggered\");\n  setLoading(true);\n\n  void (async () => {\n    await delay(800);\n    console.log(\"[BROKEN] request finished\");\n    setLoading(false);\n  })();\n}\n\n<button disabled={loading} onClick={handleSubmit}>\n  {loading ? \"Submitting...\" : \"Submit\"}\n</button>",
+        "path": "src/app/practice/double-submit-ui-lag/page.tsx"
+      },
+      {
+        "type": "description",
+        "value": "Because state updates are asynchronous, multiple click events can be processed before the button becomes disabled in the DOM."
+      },
+      {
+        "type": "spacing",
+        "value": ""
+      },
+      {
+        "type": "heading",
+        "value": "Solution"
+      },
+      {
+        "type": "description",
+        "value": "Use a synchronous guard that does not rely on React render timing. A mutable ref blocks duplicate execution immediately before state updates propagate."
+      },
+      {
+        "type": "code",
+        "value": "const [loading, setLoading] = useState(false);\nconst inFlightRef = useRef(false);\n\nfunction handleSubmit() {\n  if (inFlightRef.current) {\n    console.log(\"[FIXED] duplicate submit prevented\");\n    return;\n  }\n\n  inFlightRef.current = true;\n  console.log(\"[FIXED] submit triggered\");\n  setLoading(true);\n\n  void (async () => {\n    await delay(800);\n    console.log(\"[FIXED] request finished\");\n    inFlightRef.current = false;\n    setLoading(false);\n  })();\n}\n\n<button disabled={loading} onClick={handleSubmit}>\n  {loading ? \"Submitting...\" : \"Submit\"}\n</button>",
+        "path": "src/app/practice/double-submit-ui-lag/page.tsx"
+      },
+      {
+        "type": "description",
+        "value": "The ref acts as an immediate execution lock. It prevents duplicate side effects before React re-renders and disables the button."
+      },
+      {
+        "type": "separator",
+        "value": ""
+      },
+      {
+        "type": "description",
+        "value": "UI state updates are not synchronous execution guards. When side effects must not run more than once, protection must exist outside the render cycle. Immediate execution locks prevent duplicate network calls and inconsistent server state."
+      }
+    ]
   }
 ]
