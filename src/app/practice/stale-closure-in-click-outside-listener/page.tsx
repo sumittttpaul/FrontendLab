@@ -112,7 +112,7 @@ export default function Page() {
   const [show, setShow] = useState<"broken" | "fixed">("broken");
 
   return (
-    <main className="mx-auto flex size-full max-w-200 flex-col items-center justify-center gap-6 p-8 max-[56rem]:p-4">
+    <main className="items-left mx-auto flex size-full max-w-200 flex-col justify-center gap-6 p-8 max-[56rem]:p-4">
       <div className="flex items-center gap-4">
         <span className="rounded-full border px-5 py-2 text-sm select-none">Viewing: {show.toUpperCase()} example</span>
       </div>

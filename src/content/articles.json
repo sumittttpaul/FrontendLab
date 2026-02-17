@@ -295,5 +295,96 @@
         "value": "UI state updates are not synchronous execution guards. When side effects must not run more than once, protection must exist outside the render cycle. Immediate execution locks prevent duplicate network calls and inconsistent server state."
       }
     ]
-  }
+  },
+  {
+  "id": "5",
+  "title": "Optimistic UI rollback failure",
+  "publishedAt": "Feb 18, 2026",
+  "readTime": "2 min",
+  "banner": "https://res.cloudinary.com/frontendddlab/image/upload/v1771339950/banner_r3ienk.png",
+  "sourceLink": "https://github.com/sumittttpaul/FrontendLab/blob/master/src/app/practice/optimistic-ui-rollback-failure/page.tsx",
+  "keywords": [
+    "optimistic ui",
+    "frontend edge case",
+    "state rollback bug",
+    "react async failure",
+    "ui correctness"
+  ],
+  "content": [
+    {
+      "type": "heading",
+      "value": "Problem"
+    },
+    {
+      "type": "description",
+      "value": "An optimistic UI update immediately reflects a user action before the server confirms success. If the request fails or multiple toggles occur quickly, the UI can drift away from actual server state."
+    },
+    {
+      "type": "description",
+      "value": "The failure becomes visible when responses resolve out of order. Because rollback logic depends on previously captured state, rapid interactions can cause the UI to revert to an outdated value that no longer represents user intent."
+    },
+    {
+      "type": "point",
+      "value": [
+        "User toggles state rapidly.",
+        "UI updates immediately (optimistic update).",
+        "Server responds out of order or fails.",
+        "Rollback logic restores incorrect state."
+      ]
+    },
+    {
+      "type": "code",
+      "value": "const [liked, setLiked] = useState(false);\n\nfunction handleToggle() {\n  const previous = liked;\n  setLiked(!liked); // optimistic update\n\n  void (async () => {\n    try {\n      await fakeRequest();\n      console.log(\"[BROKEN] server confirmed\");\n    } catch {\n      console.log(\"[BROKEN] server failed → rolling back\");\n      setLiked(previous);\n    }\n  })();\n}",
+      "path": "src/app/practice/optimistic-ui-rollback/page.tsx"
+    },
+    {
+      "type": "description",
+      "value": "Because the stored 'previous' value represents state at a specific moment in time, it may no longer be valid by the time the request resolves. Rollback logic based on stale baselines introduces subtle state corruption."
+    },
+    {
+      "type": "video",
+      "value": "https://res.cloudinary.com/frontendddlab/video/upload/v1771339953/broken_kfads1.mp4",
+      "thumbnail": "https://res.cloudinary.com/frontendddlab/image/upload/v1771339950/thumbnail_broken_shqcm9.png"
+    },
+    {
+      "type": "spacing",
+      "value": ""
+    },
+    {
+      "type": "heading",
+      "value": "Solution"
+    },
+    {
+      "type": "description",
+      "value": "Each optimistic mutation is assigned a request identity. Only the latest request is allowed to commit success or rollback. Outdated responses are ignored instead of mutating state."
+    },
+    {
+      "type": "description",
+      "value": "Instead of relying on a captured 'previous' value, the UI validates whether the response still matches the most recent user intent. This ensures rollback only occurs when it reflects the current interaction context."
+    },
+    {
+      "type": "code",
+      "value": "const requestIdRef = useRef(0);\nconst [liked, setLiked] = useState(false);\n\nfunction handleToggle() {\n  const requestId = ++requestIdRef.current;\n  setLiked((prev) => !prev);\n\n  void (async () => {\n    try {\n      await fakeRequest();\n\n      if (requestId !== requestIdRef.current) {\n        console.log(\"[FIXED] stale response ignored\");\n        return;\n      }\n\n      console.log(\"[FIXED] server confirmed\");\n    } catch {\n      if (requestId !== requestIdRef.current) {\n        console.log(\"[FIXED] stale failure ignored\");\n        return;\n      }\n\n      console.log(\"[FIXED] server failed → reverting safely\");\n      setLiked((prev) => !prev);\n    }\n  })();\n}",
+      "path": "src/app/practice/optimistic-ui-rollback/page.tsx"
+    },
+    {
+      "type": "description",
+      "value": "By validating request identity before committing success or rollback, the UI remains aligned with the latest user intent even under rapid interaction and network variance."
+    },
+    {
+      "type": "video",
+      "value": "https://res.cloudinary.com/frontendddlab/video/upload/v1771339955/fixed_hlsat9.mp4",
+      "thumbnail": "https://res.cloudinary.com/frontendddlab/image/upload/v1771339950/thumbnail_fixed_iolv4z.png"
+    },
+    {
+      "type": "separator",
+      "value": ""
+    },
+    {
+      "type": "description",
+      "value": "Optimistic UI improves perceived performance, but without identity validation it can corrupt state under rapid interaction or network latency. Treat async confirmations as untrusted until validated against current intent."
+    }
+  ]
+}
+
 ]

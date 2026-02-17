@@ -63,7 +63,7 @@ export default function Page() {
   // ------------------------ Fixed code (ends here) ------------------------
 
   return (
-    <main className="mx-auto flex size-full max-w-200 flex-col items-center justify-center gap-4 p-8 max-[56rem]:p-4">
+    <main className="items-left mx-auto flex size-full max-w-200 flex-col justify-center gap-4 p-8 max-[56rem]:p-4">
       <Input placeholder="Search by product, category or brand" value={query} onChange={(e) => setQuery(e.target.value)} />
       <span className="h-15 w-full">
         {query.trim() && (
