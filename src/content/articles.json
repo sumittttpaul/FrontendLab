@@ -297,94 +297,171 @@
     ]
   },
   {
-  "id": "5",
-  "title": "Optimistic UI rollback failure",
-  "publishedAt": "Feb 18, 2026",
-  "readTime": "2 min",
-  "banner": "https://res.cloudinary.com/frontendddlab/image/upload/v1771339950/banner_r3ienk.png",
-  "sourceLink": "https://github.com/sumittttpaul/FrontendLab/blob/master/src/app/practice/optimistic-ui-rollback-failure/page.tsx",
-  "keywords": [
-    "optimistic ui",
-    "frontend edge case",
-    "state rollback bug",
-    "react async failure",
-    "ui correctness"
-  ],
-  "content": [
-    {
-      "type": "heading",
-      "value": "Problem"
-    },
-    {
-      "type": "description",
-      "value": "An optimistic UI update immediately reflects a user action before the server confirms success. If the request fails or multiple toggles occur quickly, the UI can drift away from actual server state."
-    },
-    {
-      "type": "description",
-      "value": "The failure becomes visible when responses resolve out of order. Because rollback logic depends on previously captured state, rapid interactions can cause the UI to revert to an outdated value that no longer represents user intent."
-    },
-    {
-      "type": "point",
-      "value": [
-        "User toggles state rapidly.",
-        "UI updates immediately (optimistic update).",
-        "Server responds out of order or fails.",
-        "Rollback logic restores incorrect state."
-      ]
-    },
-    {
-      "type": "code",
-      "value": "const [liked, setLiked] = useState(false);\n\nfunction handleToggle() {\n  const previous = liked;\n  setLiked(!liked); // optimistic update\n\n  void (async () => {\n    try {\n      await fakeRequest();\n      console.log(\"[BROKEN] server confirmed\");\n    } catch {\n      console.log(\"[BROKEN] server failed → rolling back\");\n      setLiked(previous);\n    }\n  })();\n}",
-      "path": "src/app/practice/optimistic-ui-rollback/page.tsx"
-    },
-    {
-      "type": "description",
-      "value": "Because the stored 'previous' value represents state at a specific moment in time, it may no longer be valid by the time the request resolves. Rollback logic based on stale baselines introduces subtle state corruption."
-    },
-    {
-      "type": "video",
-      "value": "https://res.cloudinary.com/frontendddlab/video/upload/v1771339953/broken_kfads1.mp4",
-      "thumbnail": "https://res.cloudinary.com/frontendddlab/image/upload/v1771339950/thumbnail_broken_shqcm9.png"
-    },
-    {
-      "type": "spacing",
-      "value": ""
-    },
-    {
-      "type": "heading",
-      "value": "Solution"
-    },
-    {
-      "type": "description",
-      "value": "Each optimistic mutation is assigned a request identity. Only the latest request is allowed to commit success or rollback. Outdated responses are ignored instead of mutating state."
-    },
-    {
-      "type": "description",
-      "value": "Instead of relying on a captured 'previous' value, the UI validates whether the response still matches the most recent user intent. This ensures rollback only occurs when it reflects the current interaction context."
-    },
-    {
-      "type": "code",
-      "value": "const requestIdRef = useRef(0);\nconst [liked, setLiked] = useState(false);\n\nfunction handleToggle() {\n  const requestId = ++requestIdRef.current;\n  setLiked((prev) => !prev);\n\n  void (async () => {\n    try {\n      await fakeRequest();\n\n      if (requestId !== requestIdRef.current) {\n        console.log(\"[FIXED] stale response ignored\");\n        return;\n      }\n\n      console.log(\"[FIXED] server confirmed\");\n    } catch {\n      if (requestId !== requestIdRef.current) {\n        console.log(\"[FIXED] stale failure ignored\");\n        return;\n      }\n\n      console.log(\"[FIXED] server failed → reverting safely\");\n      setLiked((prev) => !prev);\n    }\n  })();\n}",
-      "path": "src/app/practice/optimistic-ui-rollback/page.tsx"
-    },
-    {
-      "type": "description",
-      "value": "By validating request identity before committing success or rollback, the UI remains aligned with the latest user intent even under rapid interaction and network variance."
-    },
-    {
-      "type": "video",
-      "value": "https://res.cloudinary.com/frontendddlab/video/upload/v1771339955/fixed_hlsat9.mp4",
-      "thumbnail": "https://res.cloudinary.com/frontendddlab/image/upload/v1771339950/thumbnail_fixed_iolv4z.png"
-    },
-    {
-      "type": "separator",
-      "value": ""
-    },
-    {
-      "type": "description",
-      "value": "Optimistic UI improves perceived performance, but without identity validation it can corrupt state under rapid interaction or network latency. Treat async confirmations as untrusted until validated against current intent."
-    }
-  ]
-}
-
+    "id": "5",
+    "title": "Optimistic UI rollback failure",
+    "publishedAt": "Feb 18, 2026",
+    "readTime": "2 min",
+    "banner": "https://res.cloudinary.com/frontendddlab/image/upload/v1771339950/banner_r3ienk.png",
+    "sourceLink": "https://github.com/sumittttpaul/FrontendLab/blob/master/src/app/practice/optimistic-ui-rollback-failure/page.tsx",
+    "keywords": ["optimistic ui", "frontend edge case", "state rollback bug", "react async failure", "ui correctness"],
+    "content": [
+      {
+        "type": "heading",
+        "value": "Problem"
+      },
+      {
+        "type": "description",
+        "value": "An optimistic UI update immediately reflects a user action before the server confirms success. If the request fails or multiple toggles occur quickly, the UI can drift away from actual server state."
+      },
+      {
+        "type": "description",
+        "value": "The failure becomes visible when responses resolve out of order. Because rollback logic depends on previously captured state, rapid interactions can cause the UI to revert to an outdated value that no longer represents user intent."
+      },
+      {
+        "type": "point",
+        "value": [
+          "User toggles state rapidly.",
+          "UI updates immediately (optimistic update).",
+          "Server responds out of order or fails.",
+          "Rollback logic restores incorrect state."
+        ]
+      },
+      {
+        "type": "code",
+        "value": "const [liked, setLiked] = useState(false);\n\nfunction handleToggle() {\n  const previous = liked;\n  setLiked(!liked); // optimistic update\n\n  void (async () => {\n    try {\n      await fakeRequest();\n      console.log(\"[BROKEN] server confirmed\");\n    } catch {\n      console.log(\"[BROKEN] server failed → rolling back\");\n      setLiked(previous);\n    }\n  })();\n}",
+        "path": "src/app/practice/optimistic-ui-rollback/page.tsx"
+      },
+      {
+        "type": "description",
+        "value": "Because the stored 'previous' value represents state at a specific moment in time, it may no longer be valid by the time the request resolves. Rollback logic based on stale baselines introduces subtle state corruption."
+      },
+      {
+        "type": "video",
+        "value": "https://res.cloudinary.com/frontendddlab/video/upload/v1771339953/broken_kfads1.mp4",
+        "thumbnail": "https://res.cloudinary.com/frontendddlab/image/upload/v1771339950/thumbnail_broken_shqcm9.png"
+      },
+      {
+        "type": "spacing",
+        "value": ""
+      },
+      {
+        "type": "heading",
+        "value": "Solution"
+      },
+      {
+        "type": "description",
+        "value": "Each optimistic mutation is assigned a request identity. Only the latest request is allowed to commit success or rollback. Outdated responses are ignored instead of mutating state."
+      },
+      {
+        "type": "description",
+        "value": "Instead of relying on a captured 'previous' value, the UI validates whether the response still matches the most recent user intent. This ensures rollback only occurs when it reflects the current interaction context."
+      },
+      {
+        "type": "code",
+        "value": "const requestIdRef = useRef(0);\nconst [liked, setLiked] = useState(false);\n\nfunction handleToggle() {\n  const requestId = ++requestIdRef.current;\n  setLiked((prev) => !prev);\n\n  void (async () => {\n    try {\n      await fakeRequest();\n\n      if (requestId !== requestIdRef.current) {\n        console.log(\"[FIXED] stale response ignored\");\n        return;\n      }\n\n      console.log(\"[FIXED] server confirmed\");\n    } catch {\n      if (requestId !== requestIdRef.current) {\n        console.log(\"[FIXED] stale failure ignored\");\n        return;\n      }\n\n      console.log(\"[FIXED] server failed → reverting safely\");\n      setLiked((prev) => !prev);\n    }\n  })();\n}",
+        "path": "src/app/practice/optimistic-ui-rollback/page.tsx"
+      },
+      {
+        "type": "description",
+        "value": "By validating request identity before committing success or rollback, the UI remains aligned with the latest user intent even under rapid interaction and network variance."
+      },
+      {
+        "type": "video",
+        "value": "https://res.cloudinary.com/frontendddlab/video/upload/v1771339955/fixed_hlsat9.mp4",
+        "thumbnail": "https://res.cloudinary.com/frontendddlab/image/upload/v1771339950/thumbnail_fixed_iolv4z.png"
+      },
+      {
+        "type": "separator",
+        "value": ""
+      },
+      {
+        "type": "description",
+        "value": "Optimistic UI improves perceived performance, but without identity validation it can corrupt state under rapid interaction or network latency. Treat async confirmations as untrusted until validated against current intent."
+      }
+    ]
+  },
+  {
+    "id": "6",
+    "title": "State update after route transition",
+    "publishedAt": "Feb 20, 2026",
+    "readTime": "2 min",
+    "banner": "https://res.cloudinary.com/frontendddlab/image/upload/v1771563713/banner_ui6s9i.png",
+    "sourceLink": "https://github.com/sumittttpaul/FrontendLab/blob/master/src/app/practice/state-update-after-route-transition/page.tsx",
+    "keywords": ["route transition bug", "react navigation race", "state leak", "frontend lifecycle issue", "ui correctness"],
+    "content": [
+      {
+        "type": "heading",
+        "value": "Problem"
+      },
+      {
+        "type": "description",
+        "value": "A component starts asynchronous work and then a route transition occurs before the work completes. When the async task resolves, it updates state that no longer matches the active route."
+      },
+      {
+        "type": "description",
+        "value": "Under rapid navigation or slow network conditions, outdated async results can commit state after the user has moved to a different page, causing visual flickers or data appearing briefly in the wrong context."
+      },
+      {
+        "type": "point",
+        "value": [
+          "Async request triggered on mount.",
+          "User navigates away quickly.",
+          "Async resolves after route change.",
+          "State update applies to outdated screen context."
+        ]
+      },
+      {
+        "type": "code",
+        "value": "useEffect(() => {\n  console.log(\"[BROKEN] request started for route:\", route);\n\n  void (async () => {\n    const data = await fetchData(route);\n    console.log(\"[BROKEN] request resolved for route:\", route);\n    setData(data);\n  })();\n}, [route]);",
+        "path": "src/app/practice/route-transition-state-leak/page.tsx"
+      },
+      {
+        "type": "description",
+        "value": "Because the async callback closes over the original route value, late responses may commit data that no longer matches the current navigation state."
+      },
+      {
+        "type": "video",
+        "value": "https://res.cloudinary.com/frontendddlab/video/upload/v1771563717/broken_e3tnor.mp4",
+        "thumbnail": "https://res.cloudinary.com/frontendddlab/image/upload/v1771563714/thumbnail_broken_a9kkso.png"
+      },
+      {
+        "type": "spacing",
+        "value": ""
+      },
+      {
+        "type": "heading",
+        "value": "Solution"
+      },
+      {
+        "type": "description",
+        "value": "Associate each route-triggered request with a request identity. Only allow the most recent route request to commit state."
+      },
+      {
+        "type": "description",
+        "value": "Instead of assuming navigation invalidates previous async tasks, explicitly validate that the response still corresponds to the active route before updating state."
+      },
+      {
+        "type": "code",
+        "value": "const requestIdRef = useRef(0);\n\nuseEffect(() => {\n  const requestId = ++requestIdRef.current;\n  console.log(\"[FIXED] request started for route:\", route);\n\n  void (async () => {\n    const data = await fetchData(route);\n\n    if (requestId !== requestIdRef.current) {\n      console.log(\"[FIXED] stale route response ignored\");\n      return;\n    }\n\n    console.log(\"[FIXED] request committed for route:\", route);\n    setData(data);\n  })();\n}, [route]);",
+        "path": "src/app/practice/route-transition-state-leak/page.tsx"
+      },
+      {
+        "type": "description",
+        "value": "By validating request identity against the current route, outdated responses are ignored and UI state remains aligned with active navigation context."
+      },
+      {
+        "type": "video",
+        "value": "https://res.cloudinary.com/frontendddlab/video/upload/v1771563716/fixed_maetm1.mp4",
+        "thumbnail": "https://res.cloudinary.com/frontendddlab/image/upload/v1771563713/thumbnail_fixed_uuwe4c.png"
+      },
+      {
+        "type": "separator",
+        "value": ""
+      },
+      {
+        "type": "description",
+        "value": "Route transitions do not automatically cancel asynchronous work. Treat async results as untrusted until verified against the current navigation intent."
+      }
+    ]
+  }
 ]
