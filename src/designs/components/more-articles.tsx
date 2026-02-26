@@ -9,7 +9,7 @@ export function MoreArticles({ slug }: { slug: string }) {
 
   if (articles.length > 0)
     return (
-      <div className="flex size-full flex-col gap-8 p-8 max-[56rem]:p-4">
+      <div className="flex size-full flex-col gap-8 p-8 max-[56rem]:gap-4 max-[56rem]:p-4">
         <h4 className="flex w-full scroll-mt-19.5 items-center gap-2 truncate text-xs text-[1.2rem] leading-6 font-bold select-none max-[56rem]:px-4 sm:text-[1.3rem] sm:leading-7 md:scroll-mt-21 md:gap-4 md:text-[1.4rem] md:leading-8 [&:has(+_p)]:-mb-4 md:[&:has(+_p)]:-mb-8 [@media(width_>=_56rem)]:text-[1.8rem] [@media(width_>=_56rem)]:leading-9">
           More Cases
           <HugeiconsIcon icon={ArrowRight02Icon} strokeWidth={2} size={28} className="size-7 max-[56rem]:size-5.5" />
