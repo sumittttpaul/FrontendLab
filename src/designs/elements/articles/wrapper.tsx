@@ -11,9 +11,9 @@ const DashedLine = ({ className = "" }: { className?: string }) => (
   <span className={cn("relative h-full border-r border-dashed opacity-75", className)} />
 );
 
-export function Page({ children }: React.PropsWithChildren) {
+export function Wrapper({ children }: React.PropsWithChildren) {
   return (
-    <main className="mx-auto size-full max-w-300 p-8 max-[56rem]:p-4 max-[56rem]:pt-9 md:pt-23">
+    <div className="size-full max-w-300 p-8 max-[56rem]:p-4">
       <div className="relative flex size-full flex-col items-center justify-center">
         <div className="pointer-events-none absolute inset-0 z-0">
           <div className="relative size-full border">
@@ -25,10 +25,10 @@ export function Page({ children }: React.PropsWithChildren) {
             </div>
           </div>
         </div>
-        <article className="relative z-10 mx-auto flex size-full max-w-200 flex-col items-center justify-center gap-8 pt-10 pb-8 max-[56rem]:max-w-full md:gap-12.5 md:pt-20 md:pb-12.5">
+        <article className="relative z-10 flex size-full max-w-200 flex-col items-center justify-center gap-8 pt-10 pb-8 max-[56rem]:max-w-full md:gap-12.5 md:pt-20 md:pb-12.5">
           {children}
         </article>
       </div>
-    </main>
+    </div>
   );
 }

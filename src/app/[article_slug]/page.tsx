@@ -1,24 +1,23 @@
 import { Point, PointContainer } from "@/designs/elements/articles/point";
 import { Description } from "@/designs/elements/articles/description";
 import { Separator } from "@/designs/elements/articles/separator";
+import { MoreArticles } from "@/designs/components/more-articles";
 import { CodePreview } from "@/designs/components/code-preview";
 import { VideoPlayer } from "@/designs/components/video-player";
 import { Heading } from "@/designs/elements/articles/heading";
 import { Keyword } from "@/designs/elements/articles/keyword";
 import { Spacing } from "@/designs/elements/articles/spacing";
+import { Wrapper } from "@/designs/elements/articles/wrapper";
 import { Title } from "@/designs/elements/articles/title";
 import { getArticle, getAllSlugs } from "@/libs/article";
 import { Info } from "@/designs/elements/articles/info";
-import { Page } from "@/designs/elements/articles/page";
 import { notFound } from "next/navigation";
-
-type Props = { params: Promise<{ article_slug: string }> };
 
 export async function generateStaticParams() {
   return getAllSlugs();
 }
 
-export async function generateMetadata({ params }: Props) {
+export async function generateMetadata({ params }: { params: Promise<{ article_slug: string }> }) {
   const { article_slug } = await params;
   const article = getArticle(article_slug);
 
@@ -63,45 +62,48 @@ export async function generateMetadata({ params }: Props) {
   };
 }
 
-export default async function ArticlePage({ params }: Props) {
+export default async function ArticlePage({ params }: { params: Promise<{ article_slug: string }> }) {
   const { article_slug } = await params;
   const article = getArticle(article_slug);
 
   if (!article) return notFound();
 
   return (
-    <Page>
-      <Title>{article.title}</Title>
-      <Info PublishedAt={article.publishedAt} ReadTime={article.readTime} SourceLink={article.sourceLink} />
-      {article.content.map((content, index) => {
-        switch (content.type) {
-          case "heading":
-            return <Heading key={index}>{content.value}</Heading>;
-          case "description":
-            return <Description key={index}>{content.value}</Description>;
-          case "code":
-            if (!content.path) return null;
-            return <CodePreview key={index} path={content.path} code={content.value as string} />;
-          case "video":
-            if (!content.thumbnail) return null;
-            return <VideoPlayer key={index} src={content.value as string} thumbnail={content.thumbnail} />;
-          case "separator":
-            return <Separator key={index} />;
-          case "spacing":
-            return <Spacing key={index} />;
-          case "point":
-            return (
-              <PointContainer key={index}>
-                {(content.value as string[]).map((point, index) => (
-                  <Point key={index}>{point}</Point>
-                ))}
-              </PointContainer>
-            );
-          default:
-            return null;
-        }
-      })}
-      <Keyword>{article.keywords.join(", ")}</Keyword>
-    </Page>
+    <main className="mx-auto flex size-full max-w-300 flex-col gap-13 max-[56rem]:gap-9 max-[56rem]:py-9 md:py-23">
+      <Wrapper>
+        <Title>{article.title}</Title>
+        <Info PublishedAt={article.publishedAt} ReadTime={article.readTime} SourceLink={article.sourceLink} />
+        {article.content.map((content, index) => {
+          switch (content.type) {
+            case "heading":
+              return <Heading key={index}>{content.value}</Heading>;
+            case "description":
+              return <Description key={index}>{content.value}</Description>;
+            case "code":
+              if (!content.path) return null;
+              return <CodePreview key={index} path={content.path} code={content.value as string} />;
+            case "video":
+              if (!content.thumbnail) return null;
+              return <VideoPlayer key={index} src={content.value as string} thumbnail={content.thumbnail} />;
+            case "separator":
+              return <Separator key={index} />;
+            case "spacing":
+              return <Spacing key={index} />;
+            case "point":
+              return (
+                <PointContainer key={index}>
+                  {(content.value as string[]).map((point, index) => (
+                    <Point key={index}>{point}</Point>
+                  ))}
+                </PointContainer>
+              );
+            default:
+              return null;
+          }
+        })}
+        <Keyword>{article.keywords.join(", ")}</Keyword>
+      </Wrapper>
+      <MoreArticles slug={article_slug} />
+    </main>
   );
 }
